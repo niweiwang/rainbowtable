@@ -1,16 +1,6 @@
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
-#include "sha256.h"
 #include "utils.h"
-
-//using std::cout;
-//using std::endl;
-//using std::string;
-using namespace std;
 
 string generatePassword();
 string hashStr(string toHash);
@@ -19,13 +9,9 @@ void resadFileContent();
 
 int main(void)
 {
-
-    //Init of the rand for the  password
-    //static int mySeed = 25011984;
-    //*76 + ++mySeed
     srand(time(NULL));
 
-    fstream table("rainbowTable.txt", ios::trunc | ios_base::in | ios_base::out);
+    fstream table(FILE_NAME, ios::trunc | ios_base::in | ios_base::out);
     if (!table.is_open())
     {
         cout << "problem when oppening the file";
@@ -40,14 +26,17 @@ int main(void)
     {
         password = generatePassword();
         reduced = password;
+        cout << reduced << endl;
         for (int i = 0; i < NBR_OF_REDUCTION; i++)
         {
             hashed = hashStr(reduced);
-
+            
             //cout << hashed << endl;
             reduced = reduce(i, hashed);
+            cout << reduced << endl;
         }
         table << password + reduced + "\n";
+        cout << "\n" << endl;
         //cout << "line count "<< i <<endl; // [Wang Yiwei]
     }
     sortTable(&table);
@@ -102,7 +91,6 @@ void sortTable(fstream *unsortedTable)
     }
 }
 
-//the name is kind of obvious
 string generatePassword()
 {
     string const alphaNumericLowerCase = "abcdefghijklmnopqrstuvwxyz0123456789";

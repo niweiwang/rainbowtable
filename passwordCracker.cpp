@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
-#include "sha256.h"
 #include "utils.h"
-using namespace std;
 
 string searchInTable(string pwdToFind, ifstream *table);
 string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize low, streamsize high);
@@ -24,7 +19,7 @@ int main(void)
     string result;
     int i;
 
-    ifstream table("rainbowTable.txt");
+    ifstream table(FILE_NAME);
     if (!table.is_open())
     {
         cout << "problem when oppening the file";
