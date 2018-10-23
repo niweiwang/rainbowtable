@@ -33,7 +33,7 @@ int main(void)
              cout << hashed << endl;
             //cout << hashed << endl;
             reduced = reduce(i, hashed);
-            cout << reduced << endl;
+            cout << reduced << " counter : " << i << endl;
            
         }
         table << password + reduced + "\n";
@@ -94,11 +94,10 @@ void sortTable(fstream *unsortedTable)
 
 string generatePassword()
 {
-    string const alphaNumericLowerCase = "abcdefghijklmnopqrstuvwxyz0123456789";
     string randomPassword;
     for (int i = 0; i < PASSWORD_SIZE; i++)
     {
-        randomPassword += alphaNumericLowerCase[rand() % alphaNumericLowerCase.length()];
+        randomPassword += alphanum[rand() % alphanum.length()];
     }
     return randomPassword;
 }
@@ -107,7 +106,7 @@ string generatePassword()
 void readFileContent()
 {
     string line;
-    ifstream table("rainbowTable.txt");
+    ifstream table(FILE_NAME);
     table.seekg(0, table.end);
     streamsize tableSize = table.tellg();
     int i = 0;

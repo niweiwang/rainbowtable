@@ -1,10 +1,6 @@
-#include <iostream>
 #include "utils.h"
-#include "sha256.h"
-#include <sstream>
-#include <string>
-#include <functional>
-#include <math.h>
+
+
 /*
 string reduce(int i, string hash)
 {
@@ -18,7 +14,7 @@ string reduce(int i, string hash)
     cout << "x + i % (36 ^ 8) : " << (x + i) % static_cast<int>(pow(36, 8)) << endl;
 
     cout << "hash : " << hash << endl;
-    /*
+    
     unsigned long long x = std::stoull("b5eec042bffb6e37", nullptr, 16);
     cout << "x : " << x << endl;
     
@@ -42,21 +38,23 @@ string reduce(int i, string hash)
 
     //cout << pow(3, 2) << endl;
     return hash.substr(0, 8);
-}
-*/
+}*/
+
+
+
 string reduce(int counter, string hashinput)
 {
-    string hexpwd = "", alfpwd = "";
+    //cout << "counter in: " << counter << endl;
+    //return hashinput.substr(0, 8);
+    string hexpwd = "", alfpwd = "", pwd;
 
-    int start_pos = counter % 64; //the counter modulo the length of sha256 digest length (64)
-    string pwd;
-    const string alphanum = "0123456789abcdefghijklmnopqrstuvwxyz";
-    const int ALPHANUM_SIZE = 36;
+    int start_pos = counter % HASH_LENGTH; //the counter modulo the length of sha256 digest length (64)
+    
 
     if (start_pos > 48)
     { //push the start position to 16 position to the left to avoid overflow
-        string spart1 = hashinput.substr(start_pos, 64 - start_pos);
-        string spart2 = hashinput.substr(0, (16 - 64 + start_pos));
+        string spart1 = hashinput.substr(start_pos, HASH_LENGTH - start_pos);
+        string spart2 = hashinput.substr(0, (16 - HASH_LENGTH + start_pos));
         hexpwd = (spart1 + spart2);
     }
     else
@@ -80,6 +78,7 @@ string reduce(int counter, string hashinput)
 
     return alfpwd; //return alphanumeric pwd;
 }
+
 
 string hashStr(string toHash)
 {
