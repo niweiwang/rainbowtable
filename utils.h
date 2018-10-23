@@ -14,7 +14,7 @@ static const int LINE_SIZE = PASSWORD_SIZE + LAST_REDUCE_SIZE + END_OF_LINE_N_ST
 
 static const int NBR_OF_REDUCTION = 3;
 
-static const int NBR_OF_PASSWORD = 5;
+static const int NBR_OF_ENTRIES = 2;
 
 static const string FILE_NAME = "rainbowTable.txt";
 

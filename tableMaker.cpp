@@ -22,7 +22,7 @@ int main(void)
     string password;
     string hashed;
     string reduced;
-    for (int i = 0; i < NBR_OF_PASSWORD; i++)
+    for (int i = 0; i < NBR_OF_ENTRIES; i++)
     {
         password = generatePassword();
         reduced = password;
@@ -30,10 +30,11 @@ int main(void)
         for (int i = 0; i < NBR_OF_REDUCTION; i++)
         {
             hashed = hashStr(reduced);
-            
+             cout << hashed << endl;
             //cout << hashed << endl;
             reduced = reduce(i, hashed);
             cout << reduced << endl;
+           
         }
         table << password + reduced + "\n";
         cout << "\n" << endl;

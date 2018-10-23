@@ -94,7 +94,7 @@ string searchInTable(string pwdToFind, ifstream *table)
 //obvious name is obvious
 string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize low, streamsize high)
 {
-    if ((high >= low) && (high<= NBR_OF_PASSWORD) && (low<= NBR_OF_PASSWORD))
+    if ((high >= low) && (high<= NBR_OF_ENTRIES) && (low<= NBR_OF_ENTRIES))
     {
         streamsize middle = low + (high - low) / 2;
         cout << "high : " << high << endl;
@@ -110,15 +110,17 @@ string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize 
 
         if (cmp == 0)
         {
-            cout << "hash trouvé ! password = " << line.substr(0, PASSWORD_SIZE) << endl;
+            cout << "a" << endl;
             return line.substr(0, PASSWORD_SIZE);
         }
         else if (cmp > 0)
         {
+            cout << "b" << endl;
             return binarySearchRecursiveStyle(pwdToFind, table, middle + 1, high);
         }
         else if (cmp < 0)
         {
+            cout << "c" << endl;
             return binarySearchRecursiveStyle(pwdToFind, table, low, middle - 1);
         }
      }
