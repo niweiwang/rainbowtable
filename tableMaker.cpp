@@ -26,24 +26,17 @@ int main(void)
     {
         password = generatePassword();
         reduced = password;
-        cout << reduced << endl;
+
         for (int i = 0; i < NBR_OF_REDUCTION; i++)
         {
             hashed = hashStr(reduced);
-             cout << hashed << endl;
-            //cout << hashed << endl;
             reduced = reduce(i, hashed);
-            cout << reduced << " counter : " << i << endl;
-           
         }
         table << password + reduced + "\n";
-        cout << "\n" << endl;
-        //cout << "line count "<< i <<endl; // [Wang Yiwei]
     }
     sortTable(&table);
     table.close();
-    //Calcul du temps que la creation de la table prend
-    std::cout << float(clock() - begin_time) / CLOCKS_PER_SEC << endl;
+    cout << "The table creation took " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds." << endl;
     return 0;
 }
 
@@ -55,22 +48,19 @@ void sortTable(fstream *unsortedTable)
     streamsize tableSize = unsortedTable->tellg();
     if (tableSize == -1)
     {
-        cout << "une erreur est survenue dans tellg" << endl;
+        cout << "An error was encountered using tellg" << endl;
         exit(-1);
     }
-    //cout << "tablesize = " << tableSize << endl;
     unsortedTable->seekg(0, unsortedTable->beg);
 
     for (i = 0; i < tableSize; i += LINE_SIZE)
     {
-        //cout << "table sorting line count: " << i << endl; //[Wang Yiwei]
         unsortedTable->seekg(i, ios::beg);
         getline(*unsortedTable, smallestReduce);
         temp = smallestReduce;
         emp = i;
         for (y = i + LINE_SIZE; y < tableSize; y += LINE_SIZE)
         {
-            //cout << "y = " << y << endl;
             unsortedTable->seekg(y, ios::beg);
             getline(*unsortedTable, reduceToCompare);
             cmp = smallestReduce.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE).compare(reduceToCompare.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE));
@@ -116,7 +106,6 @@ void readFileContent()
         table.seekg(i + PASSWORD_SIZE, ios::beg);
 
         getline(table, line);
-        cout << line << endl;
     }
 
     table.close();

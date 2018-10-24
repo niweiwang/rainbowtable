@@ -2,7 +2,7 @@
 
 string searchInTable(string pwdToFind, ifstream *table);
 string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize low, streamsize high);
-void findPassword(string password, string hashToBreak);
+void findPassword(string password, string hashToBreak, int counter);
 
 int main(void)
 {
@@ -16,6 +16,7 @@ int main(void)
         exit(-1);
     }
 
+    const clock_t begin_time = clock();
     string result;
     int i, j;
     string tmpHash, tmpPassword;
@@ -27,17 +28,15 @@ int main(void)
         exit(-1);
     }
 
-    //On cherche dans quelle "chaine" de hash/reduce le password est
-    //une fois qu'on a trouver le password de début de chaine, on appelle findPassword avec.
-    //for (i = NBR_OF_REDUCTION - 1; i >= 0; i--)
+    /*** 
+    *We look for the entry that describe the chain the password is stored in
+    *Call findPassword once found.
+    **/
     for (i = NBR_OF_REDUCTION - 1; i >= 0; i--)
     {
-        cout << "\n\n"
-             << endl;
         tmpHash = hashToBreak;
         for (j = i; j < NBR_OF_REDUCTION; j++)
         {
-            cout << j << " - " << reduce(j, tmpHash) << endl;
             tmpPassword = reduce(j, tmpHash);
             tmpHash = hashStr(tmpPassword);
         }
@@ -45,20 +44,19 @@ int main(void)
         result = searchInTable(tmpPassword, &table);
         if (result.compare("        ") != 0)
         {
-            findPassword(result, hashToBreak);
+            findPassword(result, hashToBreak,i);
         }
-        //tmpPassword = reduce(i, tmpHash);
-        //tmpHash = hashStr(tmpPassword);
     }
+    std::cout << float(clock() - begin_time) / CLOCKS_PER_SEC << endl;
+    table.close();
 }
 
-//on donne le mdp de début de chaine, et on applique hash/reduce jusqu'a ce qu'on le trouve.
-//no need of redoing all of that, just hash to break to which we apply counter reductions (we know counter in the main)
-void findPassword(string password, string hashToBreak)
+
+void findPassword(string password, string hashToBreak, int counter)
 {
     int i;
     string hash;
-    for (i = 0; i < NBR_OF_REDUCTION; i++)
+    for (i = 0; i < counter; i++)
     {
         hash = hashStr(password);
         if (hashToBreak.compare(hash) == 0)
@@ -68,14 +66,15 @@ void findPassword(string password, string hashToBreak)
             exit(0);
         }
         password = reduce(i, hash);
-        cout << password << " counter : " << i << " hash: " << hash << endl;
     }
     cout << "-----------------------------------------------------------" << endl;
     cout << "Le mot de passe n'a pas été trouvé, il y a une collision." << endl;
     exit(-1);
 }
 
-//using binarysearch
+/**
+*Search a password in the file using binarysearch
+**/
 string searchInTable(string pwdToFind, ifstream *table)
 {
     streamsize low = 0, high = 0;
@@ -90,7 +89,6 @@ string searchInTable(string pwdToFind, ifstream *table)
     string result = binarySearchRecursiveStyle(pwdToFind, table, low, high - 1);
     if (result.compare("        ") == 0)
     {
-        cout << "Ce hash : " << pwdToFind << " n'est pas dans la table =/ " << endl;
         return result;
     }
     else
@@ -100,22 +98,17 @@ string searchInTable(string pwdToFind, ifstream *table)
     }
 }
 
-//obvious name is obvious
 string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize low, streamsize high)
 {
     if ((high >= low) && (high <= NBR_OF_ENTRIES) && (low <= NBR_OF_ENTRIES))
     {
-        streamsize middle = low + (high - low) / 2;
-        cout << "high : " << high << endl;
-        cout << "middle : " << middle << endl;
-        cout << "low : " << low << endl;
         string line, temppwd;
         int cmp;
+        streamsize middle = low + (high - low) / 2;
         table->seekg(middle * LINE_SIZE, ios::beg);
         getline(*table, line);
-        cout << "line = " << line << endl;
 
-        cmp = pwdToFind.compare(line.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE)); // Wang Yiwei
+        cmp = pwdToFind.compare(line.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE)); 
 
         if (cmp == 0)
         {
