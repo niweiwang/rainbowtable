@@ -45,7 +45,11 @@ int main(void)
         if (result.compare("        ") != 0)
         {
             findPassword(result, hashToBreak,i);
+            break;
         }
+    }
+    if (result.compare("        ") == 0){
+        cout << "Password not found" << endl;
     }
     cout << "The research took " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds." << endl;
     table.close();
