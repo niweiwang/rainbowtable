@@ -12,7 +12,7 @@ using namespace std;
 /**
 *Configuration
 **/
-static const string FILE_NAME = "table.txt;"//"rainbowTable.txt";
+static const string FILE_NAME = "rainbowTable.txt";
 static const int NBR_OF_REDUCTION = 50000; 
 static const int NBR_OF_ENTRIES = 17000;
 static const int PASSWORD_SIZE = 8;
