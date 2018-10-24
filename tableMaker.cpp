@@ -17,15 +17,20 @@ int main() {
     const clock_t begin_time = clock();
     unsigned num_cpus = std::thread::hardware_concurrency();
     string filename[num_cpus];
+    int entries_by_cpu= NBR_OF_ENTRIES/num_cpus;
 
     cout << "Launching " << num_cpus << " threads to create rainbow table.\n";
     cout << "Estimate to finish in "<< int(NBR_OF_ENTRIES/(1.5*num_cpus)*1.1) << " seconds..."<< endl;
 
     std::vector<std::thread> threads;
 
-    for(unsigned int i = 0; i < num_cpus; ++i){
+    //First thread takes the rest of nbr entries modulo nbr threads + his share of the work
+    filename[0]= "rainbow" + to_string(1);
+    threads.push_back(std::thread(rainbowtable,rand()+0*1000,filename[0], entries_by_cpu + NBR_OF_ENTRIES%num_cpus));
+    //Each other thread process a same number of entries
+    for(unsigned int i = 1; i < num_cpus; ++i){
         filename[i]= "rainbow" + to_string(i+1);
-        threads.push_back(std::thread(rainbowtable,rand()+i*1000,filename[i], NBR_OF_ENTRIES/num_cpus));
+        threads.push_back(std::thread(rainbowtable,rand()+i*1000,filename[i], entries_by_cpu));
     }
     for(auto& thread : threads){thread.join();}
 

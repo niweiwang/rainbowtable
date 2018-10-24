@@ -14,7 +14,7 @@ using namespace std;
 **/
 static const string FILE_NAME = "rainbowTable.txt";
 static const int NBR_OF_REDUCTION = 2;//50000; 
-static const int NBR_OF_ENTRIES = 16;//50000;
+static const int NBR_OF_ENTRIES = 17;//50000;
 static const int PASSWORD_SIZE = 8;
 
 static const string alphanum = "0123456789abcdefghijklmnopqrstuvwxyz";
