@@ -26,18 +26,18 @@ int main(void)
     {
         password = generatePassword();
         reduced = password;
-        cout << reduced << endl;
+        //cout << reduced << endl;
         for (int i = 0; i < NBR_OF_REDUCTION; i++)
         {
             hashed = hashStr(reduced);
-             cout << hashed << endl;
+            //cout << hashed << endl;
             //cout << hashed << endl;
             reduced = reduce(i, hashed);
-            cout << reduced << " counter : " << i << endl;
-           
+            //cout << reduced << " counter : " << i << endl;
         }
         table << password + reduced + "\n";
-        cout << "\n" << endl;
+        //cout << "\n"
+        //<< endl;
         //cout << "line count "<< i <<endl; // [Wang Yiwei]
     }
     sortTable(&table);
@@ -116,7 +116,7 @@ void readFileContent()
         table.seekg(i + PASSWORD_SIZE, ios::beg);
 
         getline(table, line);
-        cout << line << endl;
+        //cout << line << endl;
     }
 
     table.close();
