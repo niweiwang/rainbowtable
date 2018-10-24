@@ -1,5 +1,6 @@
 CC=g++
 CFLAGS=-Wall -Wextra
+LDFLAGS=-pthread 
 EXEC=tableMaker passwordCracker
 
 all: $(EXEC)
