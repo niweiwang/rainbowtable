@@ -20,7 +20,7 @@ int main() {
     int entries_by_cpu= NBR_OF_ENTRIES/num_cpus;
 
     cout << "Launching " << num_cpus << " threads to create rainbow table.\n";
-    cout << "Estimate to finish in "<< int(NBR_OF_ENTRIES/(1.5*num_cpus)*1.1) << " seconds..."<< endl;
+    //cout << "Estimate to finish in "<< int(NBR_OF_ENTRIES/(1.5*num_cpus)*1.1) << " seconds..."<< endl;
 
     std::vector<std::thread> threads;
 
@@ -69,23 +69,23 @@ int main() {
     table.close();
 
 
-    cout << float(clock() - begin_time) / CLOCKS_PER_SEC/num_cpus << endl;
+    cout << "The table creation took " << float(clock() - begin_time) / CLOCKS_PER_SEC/num_cpus << " seconds." << endl;
     return 0;
 
 }
 
 
 void rainbowtable(int seed, string filename, int tablesize){
+    string password;
+    string hashed;
+    string reduced;
+
     srand(seed);
     fstream table(filename, ios::trunc | ios_base::in | ios_base::out);
     if (!table.is_open()){
             cout << "problem when oppening the file";
             exit(-1);
     }
-
-    string password;
-    string hashed;
-    string reduced;
 
     for (int i = 0; i < tablesize; i++)
         {
