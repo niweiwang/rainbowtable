@@ -157,7 +157,7 @@ void sortTable(fstream *unsortedTable)
     streamsize tableSize = unsortedTable->tellg();
     if (tableSize == -1)
     {
-        cout << "une erreur est survenue dans tellg" << endl;
+        cout << "An error was encountered using tellg" << endl;
         exit(-1);
     }
     unsortedTable->seekg(0, unsortedTable->beg);
@@ -175,7 +175,7 @@ void sortTable(fstream *unsortedTable)
             cmp = smallestReduce.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE).compare(reduceToCompare.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE));
             if (cmp == 0)
             {
-                cout << "/!\\ 2x le même hash" << endl;
+                cout << "/!\\ 2x the same hash" << endl;
             }
             else if (cmp > 0)
             {
