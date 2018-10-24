@@ -42,7 +42,7 @@ int main() {
 
     if (!combined_file.is_open())
     {
-        cout << "1. problem when oppening rainbow.txt file.";
+        cout << "1. problem when opening rainbowTable.txt file.";
         exit(-1);
     }
     for(unsigned int j = 0; j < num_cpus; ++j)
@@ -51,7 +51,7 @@ int main() {
             cout << filename[j]<<" appended to "<<FILE_NAME<<endl;
         }
         else {
-                cout << "2. problem when oppening the files.";
+                cout << "2. problem when opening a rainbow temp file.";
                 exit(-1);
                 }
     }
@@ -61,7 +61,7 @@ int main() {
     fstream table(FILE_NAME, ios_base::in | ios_base::out);
     if (!table.is_open())
     {
-        cout << "3.problem when oppening r.txt file.";
+        cout << "3.problem when oppening rainbowTable.txt file.";
         exit(-1);
     }
     cout<< "Sorting the Rainbow Table..."  <<endl;
