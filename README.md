@@ -9,7 +9,7 @@ Debian 9.2, g++ (8.2.1), sha256.h, sha256.cpp
 0. password definition: fixed 8 digits alphanumeric fron the character set: "0123456789abcdefghijklmnopqrstuvwxyz"
 1. utils.h contains every parameter of the program, you can for instance change the NBR_OF_REDUCTION and the NBR_OF_ENTRIES before executing the makefile.
 2. 'make all' to compile with the Makefile.
-3. "./tableMaker" to generate the rainbowTable.txt (average speed 300 line per minute)
+3. "./tableMaker" to generate the rainbowTable.txt
 4. "./passwordCracker" to enter a known sha256 hash in order to get a possible alphanumeric password
 
 # Project members: 
