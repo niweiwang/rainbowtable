@@ -47,9 +47,9 @@ int main(void)
             findPassword(result, hashToBreak,i);
         }
     }
-    cout << float(clock() - begin_time) / CLOCKS_PER_SEC << endl;
+    cout << "The research took " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds." << endl;
     table.close();
-    exit(0);
+    return 0;
 }
 
 
@@ -84,7 +84,7 @@ string searchInTable(string pwdToFind, ifstream *table)
     streamsize tableSize = table->tellg();
     if (tableSize == -1)
     {
-        cout << "une erreur est survenue dans tellg" << endl;
+        cout << "An error was encountered using tellg" << endl;
         exit(-1);
     }
     high = tableSize / LINE_SIZE;
@@ -95,7 +95,6 @@ string searchInTable(string pwdToFind, ifstream *table)
     }
     else
     {
-        cout << "Le password est : " << result << endl;
         return result;
     }
 }
