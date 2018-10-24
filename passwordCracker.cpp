@@ -9,9 +9,9 @@ int main(void)
     string hashToBreak;
     cout << "hash à cracker :" << endl;
     cin >> hashToBreak;
-    if (hashToBreak.length() != 64)
+    if (hashToBreak.length() != HASH_LENGTH)
     {
-        cout << "votre hash dois faire 64 carractères ! " << endl
+        cout << "votre hash dois faire " << HASH_LENGTH <<" carractères ! " << endl
              << "avez vous bien écrit le hash en hexadecimal ?" << endl;
         exit(-1);
     }
@@ -53,6 +53,7 @@ int main(void)
 }
 
 //on donne le mdp de début de chaine, et on applique hash/reduce jusqu'a ce qu'on le trouve.
+//no need of redoing all of that, just hash to break to which we apply counter reductions (we know counter in the main)
 void findPassword(string password, string hashToBreak)
 {
     int i;
