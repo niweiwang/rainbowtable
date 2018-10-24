@@ -17,7 +17,7 @@ int main(void)
     }
 
     string result;
-    int i,j;
+    int i, j;
     string tmpHash, tmpPassword;
 
     ifstream table(FILE_NAME);
@@ -27,21 +27,21 @@ int main(void)
         exit(-1);
     }
 
-    
-
     //On cherche dans quelle "chaine" de hash/reduce le password est
     //une fois qu'on a trouver le password de début de chaine, on appelle findPassword avec.
     //for (i = NBR_OF_REDUCTION - 1; i >= 0; i--)
     for (i = NBR_OF_REDUCTION - 1; i >= 0; i--)
     {
-        cout << "\n\n" <<endl;
+        cout << "\n\n"
+             << endl;
         tmpHash = hashToBreak;
-        for (j = i; j< NBR_OF_REDUCTION;j++){
-            cout << j <<" - "<< reduce(j, tmpHash) << endl;
+        for (j = i; j < NBR_OF_REDUCTION; j++)
+        {
+            cout << j << " - " << reduce(j, tmpHash) << endl;
             tmpPassword = reduce(j, tmpHash);
             tmpHash = hashStr(tmpPassword);
         }
-        
+
         result = searchInTable(tmpPassword, &table);
         if (result.compare("        ") != 0)
         {
@@ -87,10 +87,10 @@ string searchInTable(string pwdToFind, ifstream *table)
         exit(-1);
     }
     high = tableSize / LINE_SIZE;
-    string result = binarySearchRecursiveStyle(pwdToFind, table, low, high);
+    string result = binarySearchRecursiveStyle(pwdToFind, table, low, high - 1);
     if (result.compare("        ") == 0)
     {
-        cout << "Ce hash : "<< pwdToFind <<" n'est pas dans la table =/ " << endl;
+        cout << "Ce hash : " << pwdToFind << " n'est pas dans la table =/ " << endl;
         return result;
     }
     else
@@ -103,7 +103,7 @@ string searchInTable(string pwdToFind, ifstream *table)
 //obvious name is obvious
 string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize low, streamsize high)
 {
-    if ((high >= low) && (high<= NBR_OF_ENTRIES) && (low<= NBR_OF_ENTRIES))
+    if ((high >= low) && (high <= NBR_OF_ENTRIES) && (low <= NBR_OF_ENTRIES))
     {
         streamsize middle = low + (high - low) / 2;
         cout << "high : " << high << endl;
@@ -115,7 +115,7 @@ string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize 
         getline(*table, line);
         cout << "line = " << line << endl;
 
-        cmp = pwdToFind.compare(line.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE));// Wang Yiwei
+        cmp = pwdToFind.compare(line.substr(PASSWORD_SIZE, LAST_REDUCE_SIZE)); // Wang Yiwei
 
         if (cmp == 0)
         {
@@ -129,8 +129,7 @@ string binarySearchRecursiveStyle(string pwdToFind, ifstream *table, streamsize 
         {
             return binarySearchRecursiveStyle(pwdToFind, table, low, middle - 1);
         }
-     }
-
+    }
 
     return "        ";
 }
