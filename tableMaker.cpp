@@ -14,7 +14,7 @@ int main(void)
     fstream table(FILE_NAME, ios::trunc | ios_base::in | ios_base::out);
     if (!table.is_open())
     {
-        cout << "problem when oppening the file";
+        cout << "A problem was encountered when oppening the file "<<FILE_NAME;
         exit(-1);
     }
 

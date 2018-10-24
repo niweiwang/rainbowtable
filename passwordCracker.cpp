@@ -7,12 +7,12 @@ void findPassword(string password, string hashToBreak, int counter);
 int main(void)
 {
     string hashToBreak;
-    cout << "hash à cracker :" << endl;
+    cout << "Hash to crack :" << endl;
     cin >> hashToBreak;
     if (hashToBreak.length() != HASH_LENGTH)
     {
-        cout << "votre hash dois faire " << HASH_LENGTH <<" carractères ! " << endl
-             << "avez vous bien écrit le hash en hexadecimal ?" << endl;
+        cout << "Your hash must be of " << HASH_LENGTH <<" characters ! " << endl
+             << "Did you correctly wrote the hash in hexadecimal ?" << endl;
         exit(-1);
     }
 
@@ -24,7 +24,7 @@ int main(void)
     ifstream table(FILE_NAME);
     if (!table.is_open())
     {
-        cout << "problem when oppening the file";
+        cout << "A problem was encountered when oppening the file "<<FILE_NAME;
         exit(-1);
     }
 
@@ -47,29 +47,31 @@ int main(void)
             findPassword(result, hashToBreak,i);
         }
     }
-    std::cout << float(clock() - begin_time) / CLOCKS_PER_SEC << endl;
+    cout << float(clock() - begin_time) / CLOCKS_PER_SEC << endl;
     table.close();
+    exit(0);
 }
 
 
 void findPassword(string password, string hashToBreak, int counter)
 {
     int i;
-    string hash;
-    for (i = 0; i < counter; i++)
+    string hash, lastPassword;
+    for (i = 0; i < counter+1; i++)
     {
         hash = hashStr(password);
-        if (hashToBreak.compare(hash) == 0)
-        {
-            cout << "-----------------------------------------------------------" << endl;
-            cout << "Le mot de passe du hash " << hashToBreak << " est " << password << endl;
-            exit(0);
-        }
+        lastPassword = password;
         password = reduce(i, hash);
     }
-    cout << "-----------------------------------------------------------" << endl;
-    cout << "Le mot de passe n'a pas été trouvé, il y a une collision." << endl;
-    exit(-1);
+    if (hashToBreak.compare(hash) == 0)
+    {
+        cout << "-----------------------------------------------------------" << endl;
+        cout << "The corresponding password of hash " << hashToBreak << " is " << lastPassword << endl;
+    }else{
+        cout << "-----------------------------------------------------------" << endl;
+        cout << "The password could not be found, it means there is a collision." << endl;
+        exit(-1);
+    }
 }
 
 /**
