@@ -1,43 +1,147 @@
-#include <stdlib.h>
+#include <ostream>
+#include <thread>
+#include <ctime>
+#include <vector>
 #include <time.h>
+#include <chrono>
 #include "utils.h"
 
+void rainbowtable(int seed, string filename, int tablesize);
 string generatePassword();
-string hashStr(string toHash);
+bool copyfile(string sourcefile, fstream &dest_file);
 void sortTable(fstream *unsortedTable);
-void resadFileContent();
 
-int main(void)
-{
+int main() {
     srand(time(NULL));
 
-    fstream table(FILE_NAME, ios::trunc | ios_base::in | ios_base::out);
-    if (!table.is_open())
+    const clock_t begin_time = clock();
+    unsigned num_cpus = std::thread::hardware_concurrency();
+    string filename[num_cpus];
+
+    cout << "Launching " << num_cpus << " threads to create rainbow table.\n";
+    cout << "Estimate to finish in "<< int(NBR_OF_ENTRIES/(1.5*num_cpus)*1.1) << " seconds..."<< endl;
+
+    std::vector<std::thread> threads;
+
+    for(unsigned int i = 0; i < num_cpus; ++i){
+        filename[i]= "rainbow" + to_string(i+1);
+        threads.push_back(std::thread(rainbowtable,rand()+i*1000,filename[i], NBR_OF_ENTRIES/num_cpus));
+    }
+    for(auto& thread : threads){thread.join();}
+
+
+
+    // merge rainbow1, rainbow2, rainbow3....
+    //string filetosort ="./"+FILE_NAME;
+    fstream combined_file(FILE_NAME, ios::trunc | ios_base::in | ios_base::out|std::ios_base::binary);
+
+    if (!combined_file.is_open())
     {
-        cout << "A problem was encountered when oppening the file "<<FILE_NAME;
+        cout << "1. problem when oppening rainbow.txt file.";
         exit(-1);
     }
+    for(unsigned int j = 0; j < num_cpus; ++j)
+    {
+        if (copyfile(filename[j],combined_file)){
+            cout << filename[j]<<" appended to "<<FILE_NAME<<endl;
+        }
+        else {
+                cout << "2. problem when oppening the files.";
+                exit(-1);
+                }
+    }
+    combined_file.close();
+    // end merge rainbow
 
-    const clock_t begin_time = clock();
+    fstream table(FILE_NAME, ios_base::in | ios_base::out);
+    if (!table.is_open())
+    {
+        cout << "3.problem when oppening r.txt file.";
+        exit(-1);
+    }
+    cout<< "Sorting the Rainbow Table..."  <<endl;
+    sortTable(&table);
+    table.close();
+
+
+    cout << float(clock() - begin_time) / CLOCKS_PER_SEC/num_cpus << endl;
+    return 0;
+
+}
+
+
+void rainbowtable(int seed, string filename, int tablesize){
+    srand(seed);
+    fstream table(filename, ios::trunc | ios_base::in | ios_base::out);
+    if (!table.is_open()){
+            cout << "problem when oppening the file";
+            exit(-1);
+    }
+
     string password;
     string hashed;
     string reduced;
-    for (int i = 0; i < NBR_OF_ENTRIES; i++)
-    {
-        password = generatePassword();
-        reduced = password;
 
-        for (int i = 0; i < NBR_OF_REDUCTION; i++)
+    for (int i = 0; i < tablesize; i++)
         {
-            hashed = hashStr(reduced);
-            reduced = reduce(i, hashed);
+            password = generatePassword();
+            reduced = password;
+            for (int i = 0; i < NBR_OF_REDUCTION; i++)
+            {
+                hashed = hashStr(reduced);
+                reduced = reduce(i, hashed);
+            }
+            table << password + reduced + "\n";
         }
-        table << password + reduced + "\n";
-    }
-    sortTable(&table);
+
     table.close();
-    cout << "The table creation took " << float(clock() - begin_time) / CLOCKS_PER_SEC << " seconds." << endl;
-    return 0;
+
+}
+
+
+string generatePassword()
+{
+    string randomPassword;
+    for (int i = 0; i < PASSWORD_SIZE; i++)
+    {
+        randomPassword += alphanum[rand() % alphanum.length()];
+    }
+    return randomPassword;
+}
+
+bool copyfile(string sourcefile, fstream &dest_file)
+{
+
+    string filetopen ="./"+sourcefile;
+    std::ifstream srce_file(filetopen,std::ios_base::binary);
+
+    if (!srce_file.is_open())
+    {
+        cout << "problem when oppening the file";
+        exit(-1);
+    }
+
+     if (!dest_file.is_open())
+    {
+        cout << "problem when oppening the file";
+        exit(-1);
+    }
+
+    if(srce_file)
+    {
+        dest_file.seekp(0, std::ios_base::end);
+        dest_file << srce_file.rdbuf();
+        srce_file.close();
+        return true ;
+    }
+    else
+    {
+        std::cerr << "error: could not open " << sourcefile << '\n' ;
+        return false ;
+    }
+
+
+
 }
 
 void sortTable(fstream *unsortedTable)
@@ -48,7 +152,7 @@ void sortTable(fstream *unsortedTable)
     streamsize tableSize = unsortedTable->tellg();
     if (tableSize == -1)
     {
-        cout << "An error was encountered using tellg" << endl;
+        cout << "une erreur est survenue dans tellg" << endl;
         exit(-1);
     }
     unsortedTable->seekg(0, unsortedTable->beg);
@@ -82,31 +186,3 @@ void sortTable(fstream *unsortedTable)
     }
 }
 
-string generatePassword()
-{
-    string randomPassword;
-    for (int i = 0; i < PASSWORD_SIZE; i++)
-    {
-        randomPassword += alphanum[rand() % alphanum.length()];
-    }
-    return randomPassword;
-}
-
-//each line is LINE_SIZE bites
-void readFileContent()
-{
-    string line;
-    ifstream table(FILE_NAME);
-    table.seekg(0, table.end);
-    streamsize tableSize = table.tellg();
-    int i = 0;
-    for (i = 0; i < tableSize; i += LINE_SIZE)
-    {
-
-        table.seekg(i + PASSWORD_SIZE, ios::beg);
-
-        getline(table, line);
-    }
-
-    table.close();
-}

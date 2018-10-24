@@ -12,7 +12,7 @@ sha256.o: sha256.h sha256.cpp
 	$(CC) -c sha256.cpp $(CFLAGS)
 
 tableMaker: tableMaker.cpp sha256.o utils.o
-	$(CC) -o tableMaker sha256.o utils.o tableMaker.cpp $(CFLAGS)
+	$(CC) -o tableMaker sha256.o utils.o tableMaker.cpp $(CFLAGS) $(LDFLAGS)
 
 passwordCracker: passwordCracker.cpp sha256.o utils.o
 	$(CC) -o passwordCracker sha256.o utils.o passwordCracker.cpp $(CFLAGS)
